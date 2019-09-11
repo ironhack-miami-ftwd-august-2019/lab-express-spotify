@@ -57,14 +57,28 @@ app.get('/searchArtists', (req, res, next) => {
 
 app.get('/albums/:albumId', (req, res, next)=>{
     
-    console.log(req.params)
     spotifyApi.getArtistAlbums(req.params.albumId).then(data => {
-      console.log('Artist albums', data.body.items);
       res.render('album.hbs', {albumsToHBS: data.body.items})
-    }).catch(err => {
+    })
+    .catch(err => {
+        console.log("The error ", err);
+    });
+
+
+})
+
+
+app.get('/tracks/:trackId', (req, res, next)=>{
+    spotifyApi.getAlbumTracks(req.params.trackId).then(tracks => {
+        console.log('tracks are',tracks.body.items)
+        res.render('tracks.hbs', {tracksToHbs: tracks.body.items} )
+    })
+    .catch(err => {
         console.log("The error ", err);
     });
 })
+
+//'4ENxWWkPImVwAle9cpJ12I'
 
 
 

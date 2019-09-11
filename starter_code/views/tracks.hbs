@@ -1,0 +1,10 @@
+tracks
+
+<ul>
+{{#each tracksToHbs}}
+    <li>
+        {{this.name}}
+        <audio src="{{this.preview_url}}" controls></audio>
+    </li>
+{{/each}}
+</ul>

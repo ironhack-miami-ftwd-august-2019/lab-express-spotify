@@ -55,12 +55,15 @@ app.get('/searchArtists', (req, res, next) => {
 
 // req.params = { albumId: 52Qhb96Tc4f0zMSiqqRKr4 } 
 
-
 app.get('/albums/:albumId', (req, res, next)=>{
     
     console.log(req.params)
-
-    res.render('album.hbs')
+    spotifyApi.getArtistAlbums(req.params.albumId).then(data => {
+      console.log('Artist albums', data.body.items);
+      res.render('album.hbs', {albumsToHBS: data.body.items})
+    }).catch(err => {
+        console.log("The error ", err);
+    });
 })
 
 

@@ -1,0 +1,11 @@
+Show artists
+
+<ul>
+{{#each artistsToHBS}}
+    <li>
+        {{name}}
+        {{id}}
+        <a href="/albums/{{id}}">View Albums</a>
+    </li>
+{{/each}}
+</ul>

@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express = require('express');
 const hbs = require('hbs');
+const SpotifyWebApi = require("spotify-web-api-node");
 
 // require spotify-web-api-node package here:
 
@@ -12,6 +13,64 @@ const app = express();
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
+
+app.get('/', (req, res, next) => {
+    res.render('index.hbs')
+})
+
+const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.clientId,
+    clientSecret: process.env.clientSecret
+});
+
+
+// Retrieve an access token
+spotifyApi
+    .clientCredentialsGrant()
+    .then(data => {
+        spotifyApi.setAccessToken(data.body["access_token"]);
+    })
+    .catch(error => {
+        console.log("Something went wrong when retrieving an access token", error);
+    });
+
+
+
+
+
+//http://localhost:3000/searchArtists?artist=beatles
+
+app.get('/searchArtists', (req, res, next) => {
+
+    spotifyApi.searchArtists(req.query.artist).then(data => {                
+        res.render('showArtists.hbs', { artistsToHBS: data.body.artists.items })
+    })
+    .catch(err => {
+        console.log("The error while searching artists occurred: ", err);
+    });
+
+})
+
+//http://localhost:3000/albums/52Qhb96Tc4f0zMSiqqRKr4
+
+// req.params = { albumId: 52Qhb96Tc4f0zMSiqqRKr4 } 
+
+
+app.get('/albums/:albumId', (req, res, next)=>{
+    
+    console.log(req.params)
+
+    res.render('album.hbs')
+})
+
+
+
+
+
+
+
+
+
 
 
 // setting the spotify-api goes here:
